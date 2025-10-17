@@ -90,7 +90,7 @@ export function registerStockfishTools(server: McpServer): void {
           return {
             content: [
               {
-                type: "text",
+                type: "text", // 
                 text: `HTTP ${response.status}: Failed to fetch ChessDB data`,
               },
             ],
@@ -128,7 +128,11 @@ export function registerStockfishTools(server: McpServer): void {
           return {
             uci: move.uci || "N/A",
             san: move.san || "N/A", 
-            score: scoreStr,
+            score: scoreStr, // need to take a look at score 
+            /**
+             * TODO fix this
+             * It just gets confused as black sometimes because ChessDB by default shows scores with negative being bad for the side to move rather than always from the perspective of white
+             */
             winrate: move.winrate || "N/A",
             rank: move.rank,
             note: getChessDbNoteWord(move.note?.split(" ")[0] || ""),
