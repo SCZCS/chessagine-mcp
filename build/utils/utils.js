@@ -92,6 +92,37 @@ export function getChessDbNoteWord(note) {
             return "unknown";
     }
 }
+/**
+ * if note is good for black and its black's turn
+score = -score (black better)
+if note is bad for black and its black's turn
+score = +score (white better)
+    
+
+if note is good for white and its white turn
+score = +score (white is better)
+
+if note is bad for white and its white turn
+score = -score (black is better)
+ * @param score
+ * @param note
+ * @param turn
+ */
+export function normalizeChessDBScore(score, note, turn) {
+    if (note === "Good" || note === "Best" && turn === "b") {
+        return -Math.abs(score);
+    }
+    if (note === "Bad" || note === "unknown" && turn === "b") {
+        return Math.abs(score);
+    }
+    if (note === "Good" || note === "Best" && turn === "w") {
+        return Math.abs(score);
+    }
+    if (note === "Bad" || note === "unknown" && turn === "w") {
+        return -Math.abs(score);
+    }
+    return Math.abs(score);
+}
 export function collectFensFromGame(pgn) {
     const fens = [];
     const chess = new Chess();
@@ -127,8 +158,11 @@ export function validColorSchema(color) {
     return "w";
 }
 export function validateEngineDepth(depth) {
-    if (depth < 12 || depth > 15) {
-        return 15;
+    if (depth < 12) {
+        return 12;
+    }
+    if (depth > 30) {
+        return 30;
     }
     return depth;
 }
