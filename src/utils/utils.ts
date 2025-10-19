@@ -112,7 +112,7 @@ export function collectFensFromGame(pgn: string): string[]{
   return fens;
 }
 
-export function moveToFenMap(pgn: string): Record<string, string> {
+export function moveToFenMap(pgn: string, isAfter: boolean): Record<string, string> {
 
   const fenMap: Record<string, string> = {};
 
@@ -123,7 +123,10 @@ export function moveToFenMap(pgn: string): Record<string, string> {
   const history = chess.history({verbose: true});
 
   for(let i = 0; i < history.length; i++){
-    fenMap[`${history[i].san}`] = history[i].after;
+    if(isAfter){
+      fenMap[`${history[i].san}`] = history[i].after;
+    }
+    fenMap[`${history[i].san}`] = history[i].before;
   }
 
   return fenMap;
