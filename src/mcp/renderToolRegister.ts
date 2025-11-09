@@ -8,7 +8,7 @@ export function registerRenderingTools(server: McpServer): void {
   server.registerTool(
     "generate-chess-board-view-artificat-html",
     {
-      description: "get HTML code to render chess board for given FEN, and use this code to generate an artificat",
+      description: "get HTML code to render chess board artifact for given FEN and side to move",
       inputSchema: {
         fen: fenSchema,
         side: sideSchema,
@@ -17,11 +17,11 @@ export function registerRenderingTools(server: McpServer): void {
         openWorldHint: false,
       }
     },
-    async ({ fen, side = "w" }) => {
+    async ({ fen, side }) => {
       try {
         const fullFen = fen.includes(' ') ? fen : `${fen} ${side} KQkq - 0 1`;
         
-        const artifactHtml = viewBoardArtifact;
+        const artifactHtml = viewBoardArtifact(fullFen, side);
   
         return {
           content: [
