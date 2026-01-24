@@ -5,7 +5,7 @@ import { server } from "./server.js";
 import { registerAgine } from "../mcp/registerAgine.js";
 
 
-async function main() {
+ async function main() {
   try {
    
     const transport = new StdioServerTransport();
