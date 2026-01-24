@@ -1,6 +1,5 @@
 # ChessAgine MCP
 
-[![smithery badge](https://smithery.ai/badge/@jalpp/chessagine-mcp)](https://smithery.ai/server/@jalpp/chessagine-mcp)
 <p align="center">
   <img src="/icon.png" alt="ChessAgine" width="200"/>
 </p>
@@ -44,14 +43,6 @@ A comprehensive Model Context Protocol (MCP) server that provides advanced chess
 - **Puzzle Themes**: 150+ tactical motifs and patterns
 
 ## Installation
-
-### Option 0: Installing via Smithery
-
-To install ChessAgine automatically via [Smithery](https://smithery.ai/server/@jalpp/chessagine-mcp):
-
-```bash
-npx -y @smithery/cli install @jalpp/chessagine-mcp
-```
 
 ### Option 1: Using MCPB File (Recommended)
 
@@ -109,12 +100,9 @@ Add to your `claude_desktop_config.json`:
 
 ```bash
 npm run build:mcp  # Build the projects and mcpb file
-npm run dev        # test and interact with chessAgine via smithery
+npm run start       # start local server
 npm run debug      # opens MCP inspector to inspect new changes made
 ```
-
-## Community
-- **Discord**: [Join ChessAgine community](https://discord.gg/suepW7FRCY)
 
 ## License
 

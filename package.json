@@ -4,7 +4,6 @@
   "description": "",
   "type": "module",
   "main": "build/runner/stdio.js",
-  "module": "src/runner/index.ts",
   "bin": "build/runner/stdio.js",
   "exports": {
     ".": {
@@ -13,16 +12,13 @@
     }
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "smithery build",
-    "dev": "smithery dev",
     "build:mcp": "tsc && chmod +x build/runner/stdio.js && mcpb pack",
     "debug": "npx @modelcontextprotocol/inspector node build/runner/stdio.js",
     "start": "node build/runner/stdio.js"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "MIT & GPL",
   "engines": {
     "node": ">=20.9.0"
   },
