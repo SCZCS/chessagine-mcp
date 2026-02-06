@@ -1,22 +1,8 @@
 import { getKnowledgeBase } from "../tools/knowlegebase.js";
 import { moveToFenMap, PROMPT_CATEGORIES, collectFensFromGame } from "../utils/utils.js";
 import { PUZZLE_THEMES } from "../tools/puzzle.js";
+import { UtilsResult } from "./types.js";
 
-export interface UtilsResult {
-  data?: any;
-  error?: string;
-}
-
-export interface PromptCategory {
-  id: string;
-  name: string;
-  promptCount: number;
-}
-
-export interface PuzzleTheme {
-  tag: string;
-  description: string;
-}
 
 export class ChessUtilsService {
   

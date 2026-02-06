@@ -9,26 +9,7 @@ import {
 import { generateGameReview, formatGameReview } from "../review/gamereview.js";
 import { TacticalBoard } from "../themes/tacticalBoard.js";
 import { validColorSchema } from "../utils/utils.js";
-
-export interface ThemeResult {
-  data?: any;
-  error?: string;
-}
-
-export type ThemeType = 
-  | "material"
-  | "mobility" 
-  | "space"
-  | "positional"
-  | "kingSafety"
-  | "tactical"
-  | "lightsqaureControl"
-  | "darksqaureControl";
-
-export interface Variation {
-  name: string;
-  moves: string[];
-}
+import { ThemeResult, ThemeType, Variation } from "./types.js";
 
 export class ThemeAnalysisService {
   

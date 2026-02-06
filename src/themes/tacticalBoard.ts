@@ -12,30 +12,7 @@ import {
   Square,
 } from "chess.js";
 
-enum PieceType {
-  Pawn = "P",
-  Knight = "N",
-  Bishop = "B",
-  Rook = "R",
-  Queen = "Q",
-  King = "K",
-  None = "",
-}
-
-enum PieceColour {
-  White = "W",
-  Black = "B",
-}
-
-interface Pin {
-  pinnedPiece: string;
-  pinnedSquare: string;
-  pinningPiece: string;
-  pinningSquare: string;
-  targetPiece: string;
-  targetSquare: string;
-  isAbsolute: boolean;
-}
+import { PieceType, PieceColour, Pin } from "../types/types.js";
 
 export class TacticalBoard {
   private board: string[][] = Array.from({ length: 8 }, () =>

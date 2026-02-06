@@ -1,13 +1,6 @@
 import { viewBoardArtifact } from "../render/chessBoardRender.js";
 import { gameRenderHtml } from "../render/gameRender.js";
-
-export interface RenderResult {
-  data?: {
-    html: string;
-    message: string;
-  };
-  error?: string;
-}
+import { RenderResult } from "./types.js";
 
 export class ChessRenderingService {
   

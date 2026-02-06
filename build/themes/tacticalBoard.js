@@ -1,19 +1,5 @@
 import { BISHOP, Chess, KING, KNIGHT, PAWN, QUEEN, ROOK, } from "chess.js";
-var PieceType;
-(function (PieceType) {
-    PieceType["Pawn"] = "P";
-    PieceType["Knight"] = "N";
-    PieceType["Bishop"] = "B";
-    PieceType["Rook"] = "R";
-    PieceType["Queen"] = "Q";
-    PieceType["King"] = "K";
-    PieceType["None"] = "";
-})(PieceType || (PieceType = {}));
-var PieceColour;
-(function (PieceColour) {
-    PieceColour["White"] = "W";
-    PieceColour["Black"] = "B";
-})(PieceColour || (PieceColour = {}));
+import { PieceType, PieceColour } from "../types/types.js";
 export class TacticalBoard {
     board = Array.from({ length: 8 }, () => Array(8).fill(""));
     fen = "";

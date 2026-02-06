@@ -126,6 +126,40 @@ export interface SideStateScores{
     pieceMobilityScore: PieceMobility
 }
 
+export interface TempoScore {
+  developmentTempo: number;
+  initiativeTempo: number;
+  attackTempo: number;
+  mobilityTempo: number;
+  totalTempo: number;
+}
+
+export enum PieceType {
+  Pawn = "P",
+  Knight = "N",
+  Bishop = "B",
+  Rook = "R",
+  Queen = "Q",
+  King = "K",
+  None = "",
+}
+
+export enum PieceColour {
+  White = "W",
+  Black = "B",
+}
+
+export interface Pin {
+  pinnedPiece: string;
+  pinnedSquare: string;
+  pinningPiece: string;
+  pinningSquare: string;
+  targetPiece: string;
+  targetSquare: string;
+  isAbsolute: boolean;
+}
+
+
 export interface BoardState {
   fen: string;
   validfen: boolean;
