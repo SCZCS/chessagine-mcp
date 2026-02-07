@@ -1,4 +1,3 @@
-// Popular chess puzzle themes
 export const PUZZLE_THEMES = [
     { tag: "advancedPawn", description: "Advanced Pawn" },
     { tag: "advantage", description: "Advantage" },
@@ -63,25 +62,17 @@ export const PUZZLE_THEMES = [
     { tag: "xRayAttack", description: "X Ray Attack" },
     { tag: "zugzwang", description: "Zugzwang" },
 ];
-/**
- * Fetch a random puzzle from the ChessGubbins API
- * @param query - Optional query parameters for filtering puzzles
- * @returns PuzzleData or null if fetch fails
- */
 export async function fetchPuzzle(query) {
     try {
         let url = "https://api.chessgubbins.com/puzzles/random";
         const params = new URLSearchParams();
-        // Add theme filters if provided
         if (query?.themes && query.themes.length > 0) {
             params.append("themes", query.themes.join(","));
         }
-        // Add rating range if provided
         if (query?.ratingFrom && query?.ratingTo) {
             params.append("ratingFrom", query.ratingFrom.toString());
             params.append("ratingTo", query.ratingTo.toString());
         }
-        // Append query parameters if any exist
         if (params.toString()) {
             url += `?${params.toString()}`;
         }
@@ -98,9 +89,6 @@ export async function fetchPuzzle(query) {
         return null;
     }
 }
-/**
- * Get the difficulty level description based on rating
- */
 export function getDifficultyLevel(rating) {
     if (rating < 1000)
         return "Beginner";
@@ -112,16 +100,10 @@ export function getDifficultyLevel(rating) {
         return "Expert";
     return "Master";
 }
-/**
- * Format puzzle solution moves into a readable string
- */
 export function formatSolution(moves) {
     const moveList = moves.split(" ");
     return moveList.join(", ");
 }
-/**
- * Get theme descriptions for a puzzle
- */
 export function getThemeDescriptions(themeTags) {
     return themeTags
         .map(tag => {

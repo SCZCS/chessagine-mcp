@@ -1,26 +1,6 @@
 
 import axios, { AxiosInstance, AxiosError } from 'axios';
-
-export interface EvaluationRequest {
-    fen: string;
-    depth: number;
-    multiPv?: number;
-}
-
-export interface BatchEvalRequest {
-    fen: string;
-}
-
-export interface EvaluationResult {
-    bestmove: string;
-    lines: string[];
-}
-
-interface EcoEntry {
-  name: string;
-  moves: string;
-}
-
+import { EvaluationRequest, EvaluationResult, EcoEntry, BatchEvalRequest } from './types.js';
 
 export class StockfishService {
     private client: AxiosInstance;

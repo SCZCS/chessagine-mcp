@@ -23,4 +23,19 @@ export var STATE_THEMES;
     STATE_THEMES[STATE_THEMES["TACTICAL"] = 9] = "TACTICAL";
     STATE_THEMES[STATE_THEMES["TEMPO"] = 10] = "TEMPO";
 })(STATE_THEMES || (STATE_THEMES = {}));
+export var PieceType;
+(function (PieceType) {
+    PieceType["Pawn"] = "P";
+    PieceType["Knight"] = "N";
+    PieceType["Bishop"] = "B";
+    PieceType["Rook"] = "R";
+    PieceType["Queen"] = "Q";
+    PieceType["King"] = "K";
+    PieceType["None"] = "";
+})(PieceType || (PieceType = {}));
+export var PieceColour;
+(function (PieceColour) {
+    PieceColour["White"] = "W";
+    PieceColour["Black"] = "B";
+})(PieceColour || (PieceColour = {}));
 export const themeNames = ['material', 'mobility', 'space', 'positional', 'kingSafety', 'tactical', 'darksqaureControl', 'lightsqaureControl', 'tempo'];

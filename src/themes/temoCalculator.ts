@@ -1,14 +1,7 @@
 import { Color } from "chess.js";
 import { BoardState, SideStateScores } from "../types/types.js";
 import { TacticalBoard } from "../themes/tacticalBoard.js";
-
-export interface TempoScore {
-  developmentTempo: number;
-  initiativeTempo: number;
-  attackTempo: number;
-  mobilityTempo: number;
-  totalTempo: number;
-}
+import { TempoScore } from "../types/types.js";
 
 export class TempoCalculator {
   private boardstate: BoardState;

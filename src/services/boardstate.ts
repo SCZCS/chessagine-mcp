@@ -1,22 +1,6 @@
 import { getBoardState, calculateDeep } from "../protocol/state.js";
 import { PositionPrompter } from "../protocol/positionPrompter.js";
-
-export interface LegalMoveResult {
-  data?: {
-    isLegal: boolean;
-    message: string;
-  };
-  error?: string;
-}
-
-export interface BoardStateResult {
-  data?: {
-    state: any;
-    description: string;
-  };
-  error?: string;
-}
-
+import { LegalMoveResult, BoardStateResult } from "./types.js";
 export class BoardStateService {
   
   checkLegalMove(fen: string, move: string): LegalMoveResult {

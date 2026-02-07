@@ -1,9 +1,4 @@
-export interface NeuralNetResult {
-  data?: any;
-  error?: string;
-}
-
-export type EngineType = "maia2" | "leela" | "elite-leela";
+import { EngineType, NeuralNetResult } from "./types.js";
 
 export class NeuralNetService {
   private baseUrl: string = "https://nn-analyze-service-717993082875.us-central1.run.app";

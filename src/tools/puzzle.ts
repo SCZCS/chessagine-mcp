@@ -1,4 +1,4 @@
-// puzzle.ts
+
 export interface PuzzleData {
   lichessId: string;
   previousFEN: string;
@@ -21,7 +21,7 @@ export interface PuzzleTheme {
   description: string;
 }
 
-// Popular chess puzzle themes
+
 export const PUZZLE_THEMES: PuzzleTheme[] = [
   { tag: "advancedPawn", description: "Advanced Pawn" },
   { tag: "advantage", description: "Advantage" },
@@ -87,28 +87,21 @@ export const PUZZLE_THEMES: PuzzleTheme[] = [
   { tag: "zugzwang", description: "Zugzwang" },
 ];
 
-/**
- * Fetch a random puzzle from the ChessGubbins API
- * @param query - Optional query parameters for filtering puzzles
- * @returns PuzzleData or null if fetch fails
- */
+
 export async function fetchPuzzle(query?: PuzzleQuery): Promise<PuzzleData | null> {
   try {
     let url = "https://api.chessgubbins.com/puzzles/random";
     const params = new URLSearchParams();
 
-    // Add theme filters if provided
     if (query?.themes && query.themes.length > 0) {
       params.append("themes", query.themes.join(","));
     }
 
-    // Add rating range if provided
     if (query?.ratingFrom && query?.ratingTo) {
       params.append("ratingFrom", query.ratingFrom.toString());
       params.append("ratingTo", query.ratingTo.toString());
     }
 
-    // Append query parameters if any exist
     if (params.toString()) {
       url += `?${params.toString()}`;
     }
@@ -129,9 +122,7 @@ export async function fetchPuzzle(query?: PuzzleQuery): Promise<PuzzleData | nul
   }
 }
 
-/**
- * Get the difficulty level description based on rating
- */
+
 export function getDifficultyLevel(rating: number): string {
   if (rating < 1000) return "Beginner";
   if (rating < 1500) return "Intermediate";
@@ -140,17 +131,13 @@ export function getDifficultyLevel(rating: number): string {
   return "Master";
 }
 
-/**
- * Format puzzle solution moves into a readable string
- */
+
 export function formatSolution(moves: string): string {
   const moveList = moves.split(" ");
   return moveList.join(", ");
 }
 
-/**
- * Get theme descriptions for a puzzle
- */
+
 export function getThemeDescriptions(themeTags: string[]): string[] {
   return themeTags
     .map(tag => {
