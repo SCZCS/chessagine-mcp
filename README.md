@@ -59,6 +59,10 @@ Add to your `claude_desktop_config.json`:
 }
 ```
 
+### ChessAgine.Skill
+
+to properly use ChessAgine MCP, give LLM access to how to properly use the it via .skill file [here](https://github.com/jalpp/chessagine.skill)
+
 
 ### Dev commands
 

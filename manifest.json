@@ -9,7 +9,7 @@
   },
   "icon": "icon.png",
   "documentation": "https://github.com/jalpp/chessagine-mcp",
-  "support": "https://discord.gg/N2J2sP9yTm",
+  "support": "https://github.com/jalpp/chessagine-mcp",
   "server": {
     "type": "node",
     "entry_point": "/build/runner/stdio.js",

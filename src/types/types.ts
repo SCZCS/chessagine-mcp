@@ -275,3 +275,4 @@ export interface GameReview {
 
 export const themeNames: (keyof ThemeScore)[] = ['material', 'mobility', 'space', 'positional', 'kingSafety', 'tactical', 'darksqaureControl', 'lightsqaureControl', 'tempo'];
 
+
