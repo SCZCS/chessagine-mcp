@@ -4,14 +4,15 @@
   <img src="/icon.png" alt="ChessAgine" width="200"/>
 </p>
 
-ChessAgine MCP acts as a chess layer behind LLMs, it allows Agents to sit on top of chess engine, databases, APIs to smartly chess queries. Integrations include the following:
+**ChessAgine MCP** is a Model Context Protocol server that gives LLMs deep chess awareness by exposing real-time board state, Stockfish analysis, opening databases, Lichess games, and neural engines including Maia2, Leela, and Elite Leela.
 
-- **Stockfish Engine**
-- **Leela Neural Net**
-- **Maia Neural Net**
-- **Lichess APIs**
-- **Chess Opening Database**
-- **ChessDB APIs**
+It also renders individual positions and full PGN games for in-depth visual analysis—enabling AI agents to reason about positions, evaluate variations, detect themes, explore game databases, and interact directly with chess engines.
+
+## Preview
+
+<p align="center">
+  <img src="/preview.png" alt="ChessAgine Preview" />
+</p>
 
 ## Installation
 

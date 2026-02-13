@@ -17,6 +17,7 @@
     "build:chess-board": "BUILD_APP=chess-board vite build",
     "build:pgn-viewer": "BUILD_APP=pgn-viewer vite build",
     "build": "npm run build:ui && npm run build:mcp",
+    "publish": "npm run clean && npm run build",
     "debug": "npx @modelcontextprotocol/inspector node build/runner/stdio.js",
     "start": "node build/runner/stdio.js",
     "clean": "rm -rf build dist",
