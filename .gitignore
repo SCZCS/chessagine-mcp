@@ -4,6 +4,8 @@ node_modules
 .smithery 
 .env.development 
 *.mcpb
+dist
+build
 .env 
 *.db 
 *.db-* 
