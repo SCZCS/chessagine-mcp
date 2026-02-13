@@ -4,7 +4,15 @@
   <img src="/icon.png" alt="ChessAgine" width="200"/>
 </p>
 
-ChessAgine MCP acts as a chess layer behind LLMs, it allows LLMs to sit on top of chess engines, databases, common APIs to smartly chess queries.
+**ChessAgine MCP** is a Model Context Protocol server that gives LLMs deep chess awareness by exposing real-time board state, Stockfish analysis, opening databases, Lichess games, and neural engines including Maia2, Leela, and Elite Leela.
+
+It also renders individual positions and full PGN games for in-depth visual analysis—enabling AI agents to reason about positions, evaluate variations, detect themes, explore game databases, and interact directly with chess engines.
+
+## Preview
+
+<p align="center">
+  <img src="/preview.png" alt="ChessAgine Preview" />
+</p>
 
 ## Installation
 
@@ -18,6 +26,9 @@ Download the `chessagine-mcp.mcpb` file and install it directly in Claude Deskto
 4. Select the `chessagine-mcp.mcpb` file
 5. Restart Claude Desktop
 
+> [!NOTE]  
+> To make sure its working correctly ask it to render the chessboard or a specific chess query
+
 ### Option 2: Local Development Setup
 
 #### Prerequisites
@@ -29,11 +40,12 @@ Download the `chessagine-mcp.mcpb` file and install it directly in Claude Deskto
 git clone https://github.com/jalpp/chessagine-mcp.git
 cd chessagine-mcp
 npm install
-npm run build:mcp
+npm run build
 ```
 
 #### Configure Claude Desktop
-Add to your `claude_desktop_config.json`:
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 **macOS/Linux:**
 ```json
@@ -59,16 +71,32 @@ Add to your `claude_desktop_config.json`:
 }
 ```
 
+### Usage:
+
+- show me my last Lichess game I played, I'm insert_your_username there, also analyze the game using Stockfish
+- given fen compare and constrast what stockfish thinks vs Leela and Maia
+- analyze my opening rep from Chessboard magic.
+
 ### ChessAgine.Skill
 
 to properly use ChessAgine MCP, give LLM access to how to properly use the it via .skill file [here](https://github.com/jalpp/chessagine.skill)
 
+### Deploy your own instance
+
+You can deploy your own copy to Vercel in a few clicks:
+
+1. Fork this repo
+2. Go to [vercel.com/new](https://vercel.com/new) and import your fork
+3. No environment variables needed — just deploy
+4. Your server will be at `https://your-project.vercel.app/mcp`
 
 ### Dev commands
 
 ```bash
-npm run build:mcp  # Build the projects and mcpb file
-npm run start       # start local server
+npm run build:mcp  # Builds the mcp server layer which generates mcpb file
+npm run build:ui   # Builds the ChessAgine MCP UI html files
+npm run build      # Builds entire project, use for local development
+npm run start      # starts the MCP server
 npm run debug      # opens MCP inspector to inspect new changes made
 ```
 
