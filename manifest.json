@@ -1,6 +1,6 @@
 {
   "manifest_version": "0.3",
-  "name": "chessagine-mcp-v0.6.1",
+  "name": "chessagine-mcp-v0.6.2",
   "version": "2.0.0",
   "description": "ChessAgine MCP connects LLMs directly to live chess context Stockfish evaluation, board state, positional themes, ChessDB openings, Lichess games, and neural engines like Maia2, Leela, and Elite Leela. It also renders chess positions and full PGN games for deep visual analysis, turning language models into truly chess-aware agents.",
   "author": {
@@ -28,8 +28,8 @@
   "user_config": {
     "LICHESS_API_KEY": {
       "type": "string",
-      "title": "Lichess Study API Key",
-      "description": "Your Lichess API token with study:read permission. Get a PAT from Lichess here https://lichess.org/account/oauth/token",
+      "title": "Lichess API key",
+      "description": "Your Lichess API token with study:read permission, this token be also used for Lichess explorer. Get a PAT from Lichess here https://lichess.org/account/oauth/token",
       "sensitive": true,
       "required": false
     },

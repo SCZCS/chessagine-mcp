@@ -11,16 +11,25 @@ import {
 } from "../tools/puzzle.js";
 
 export class LichessService {
-  private LICHESS_STUDY_TOKEN;
+  private authToken;
   private LICHESS_USERNAME;
 
   constructor() {
-    this.LICHESS_STUDY_TOKEN = process.env.LICHESS_API_TOKEN || "";
+    this.authToken = process.env.LICHESS_API_TOKEN || "";
     this.LICHESS_USERNAME = process.env.LICHESS_USERNAME || "";
   }
 
+  private checkMissingApiTokenError() {
+    if (!this.authToken || this.authToken.length === 0) {
+      return {
+        error: "No Lichess_API_TOKEN PAT found, please set it.",
+      };
+    }
+  }
+
   public async getLichessMasterGamesOpeningBook(fen: string) {
-    const masterData = await getLichessMasterOpeningStats(fen);
+    this.checkMissingApiTokenError();
+    const masterData = await getLichessMasterOpeningStats(fen, this.authToken);
 
     if (masterData) {
       const analysis = getLLMTranslator(masterData);
@@ -37,7 +46,9 @@ export class LichessService {
   }
 
   public async getLichessPublicGamesOpeningBook(fen: string) {
-    const publicGames = await getLichessOpeningStats(fen);
+    this.checkMissingApiTokenError();
+
+    const publicGames = await getLichessOpeningStats(fen, this.authToken);
 
     if (publicGames) {
       const analysis = getLLMTranslator(publicGames);
@@ -59,7 +70,7 @@ export class LichessService {
       {
         method: "GET",
         headers: { accept: "application/x-ndjson" },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -185,7 +196,7 @@ export class LichessService {
   public async getLichessPuzzleSession(
     themes: string[] | undefined,
     ratingFrom: number | undefined,
-    ratingTo: number | undefined
+    ratingTo: number | undefined,
   ) {
     const puzzle = await fetchPuzzle({
       themes,
@@ -208,7 +219,7 @@ export class LichessService {
     const difficultyLevel = getDifficultyLevel(puzzle.rating);
 
     const instructions = `A puzzle session has been started. The opponent just played ${firstMove}. It's ${turnToMove} to move. Guide the user through finding the best move without immediately revealing the answer. If they need help, provide hints about the tactical theme (${themeDescriptions.join(
-      ", "
+      ", ",
     )}). The first move of the solution is ${solutionMoves[0]}.
         DO not show the themes to the user right away, hide the themes information from the start of the sesison, ONLY SHOW the themes when requested by user.`;
 
@@ -245,23 +256,17 @@ export class LichessService {
   }
 
   public async getLichessUserStudies(username: string) {
-    const authToken = this.LICHESS_STUDY_TOKEN;
-
-    if (!authToken || authToken.length === 0) {
-      return {
-        studies: "No Lichess_Study_TOKEN PAT found, please set it.",
-      };
-    }
+    this.checkMissingApiTokenError();
 
     const response = await fetch(
       `https://lichess.org/api/study/by/${username}`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${this.authToken}`,
           Accept: "application/x-ndjson",
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -300,38 +305,28 @@ export class LichessService {
     };
   }
 
-
   public async getLichessStudyPgn(studyId: string) {
+    this.checkMissingApiTokenError();
 
-    const authToken = this.LICHESS_STUDY_TOKEN;
+    const response = await axios.get(
+      `https://lichess.org/api/study/${studyId}.pgn`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.authToken}`,
+        },
+      },
+    );
 
-    if (!authToken || authToken.length === 0) {
+    const pgnText = response.data;
+
+    if (!pgnText || typeof pgnText !== "string" || pgnText.trim() === "") {
       return {
-        studyPgn: "No Lichess_Study_TOKEN PAT found, please set it.",
+        studyPgn: "Empty PGN found from Lichess",
       };
     }
 
-       const response = await axios.get(
-          `https://lichess.org/api/study/${studyId}.pgn`,
-          {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-
-        const pgnText = response.data;
-
-        if(!pgnText || typeof pgnText !== "string" || pgnText.trim() === ""){
-            return {
-                studyPgn: "Empty PGN found from Lichess"
-            }
-        }
-
-        return {
-            studyPgn: pgnText
-        }
-
+    return {
+      studyPgn: pgnText,
+    };
   }
-
 }
