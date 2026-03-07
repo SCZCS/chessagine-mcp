@@ -1,82 +1,50 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { fenSchema } from "../runner/schema.js";
 import { ChessDBService } from "../services/chessdb.js";
+import {toolAdapter, toolContentAdapter} from "@jalpp/mcp-adapter";
 
 export function registerChessDBTools(server: McpServer): void {
   const chessDBService = new ChessDBService();
 
-  server.registerTool(
-    "get-chessdb-analysis",
-    {
+  toolAdapter(server, {
+    name: "get-chessdb-analysis",
+    config: {
       description: "Fetch position analysis and candidate moves from ChessDB",
-      inputSchema: {
-        fen: fenSchema,
-      },
-      annotations: {
-        openWorldHint: true,
-      },
+      inputSchema: { fen: fenSchema },
+      annotations: { openWorldHint: true },
     },
-    async ({ fen }) => {
+    cb: async ({ fen }) => {
       const { data, error } = await chessDBService.getAnalysis(fen);
+      return toolContentAdapter(data ?? {}, error);
+    },
+  });
 
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  server.registerTool(
-    "get-chessdb-pv",
-    {
+  toolAdapter(server, {
+    name: "get-chessdb-pv",
+    config: {
       description: "Fetch the principal variation (best line) for a position from ChessDB",
-      inputSchema: {
-        fen: fenSchema,
-      },
-      annotations: {
-        openWorldHint: true,
-      },
+      inputSchema: { fen: fenSchema },
+      annotations: { openWorldHint: true },
     },
-    async ({ fen }) => {
+    cb: async ({ fen }) => {
       const { data, error } = await chessDBService.getPv(fen);
-
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  server.registerTool(
-    "queue-chessdb-analysis",
-    {
-      description: "Queue a chess position for background analysis on ChessDB",
-      inputSchema: {
-        fen: fenSchema,
-      },
-      annotations: {
-        openWorldHint: true,
-      },
+      return toolContentAdapter(data ?? {}, error);
     },
-    async ({ fen }) => {
-      const { success, error } = await chessDBService.queueAnalysis(fen);
+  });
 
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || (success ? "Position successfully queued for analysis." : "Failed to queue position."),
-          },
-        ],
-      };
-    }
-  );
+  toolAdapter(server, {
+    name: "queue-chessdb-analysis",
+    config: {
+      description: "Queue a chess position for background analysis on ChessDB",
+      inputSchema: { fen: fenSchema },
+      annotations: { openWorldHint: true },
+    },
+    cb: async ({ fen }) => {
+      const { success, error } = await chessDBService.queueAnalysis(fen);
+      return toolContentAdapter(
+        { success: success ?? false },
+        error ?? (!success ? "Failed to queue position." : undefined),
+      );
+    },
+  });
 }

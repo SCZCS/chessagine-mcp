@@ -1,212 +1,110 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { cbmGameIdSchema, cbmRepIdSchema, fenSchema } from "../runner/schema.js";
-import { ChessBoardMagicService } from "../services/cbm.js";
+import { toolAdapter, toolContentAdapter, httpToolAdapter } from "@jalpp/mcp-adapter";
 
+const BASE_URL = "https://api.chessboardmagic.com";
+
+const auth = {
+  type: "bearer" as const,
+  token: process.env.CHESSBOARD_MAGIC_PAT ?? "",
+};
 
 export function registerCBM(mcpserver: McpServer) {
-  const cbmService = new ChessBoardMagicService();
 
-  mcpserver.registerTool(
-    "get-chessboardmagic-repertoires",
-    {
-      description:
-        "Fetch user's chess repertoires from the Chessboard Magic Repertoire Builder",
-      inputSchema: {},
-      annotations: {
-        openWorldHint: true
+  // No-input tools — use httpToolAdapter directly
+  httpToolAdapter(mcpserver, {
+    name: "get-chessboardmagic-repertoires",
+    description: "Fetch user's chess repertoires from the Chessboard Magic Repertoire Builder",
+    endpoint: `${BASE_URL}/mcp/repertoires`,
+    method: "GET",
+    auth,
+  });
+
+  httpToolAdapter(mcpserver, {
+    name: "get-chessboardmagic-games",
+    description: "Fetch user's chess games from the Chessboard Magic Repertoire Builder",
+    endpoint: `${BASE_URL}/mcp/games`,
+    method: "GET",
+    auth,
+  });
+
+  
+  httpToolAdapter(mcpserver, {
+    name: "get-chessboardmagic-tcec-stats",
+    description: "Fetch TCEC (Top Chess Engine Championship) statistics for a specific chess position",
+    endpoint: `${BASE_URL}/mcp/tcec/stats`,
+    method: "GET",
+    inputSchema: { fen: fenSchema },
+    auth,
+  });
+
+  httpToolAdapter(mcpserver, {
+    name: "get-chessboardmagic-tcec-games",
+    description: "Fetch TCEC games that reached a specific chess position",
+    endpoint: `${BASE_URL}/mcp/tcec/games`,
+    method: "GET",
+    inputSchema: { fen: fenSchema },
+    auth,
+  });
+
+  httpToolAdapter(mcpserver, {
+    name: "get-chessboardmagic-corr-stats",
+    description: "Fetch correspondence chess statistics for a specific chess position",
+    endpoint: `${BASE_URL}/mcp/corr/stats`,
+    method: "GET",
+    inputSchema: { fen: fenSchema },
+    auth,
+  });
+
+  httpToolAdapter(mcpserver, {
+    name: "get-chessboardmagic-corr-games",
+    description: "Fetch correspondence chess games that reached a specific chess position",
+    endpoint: `${BASE_URL}/mcp/corr/games`,
+    method: "GET",
+    inputSchema: { fen: fenSchema },
+    auth,
+  });
+
+  // Path param tools — dynamic URL, use toolAdapter
+  toolAdapter(mcpserver, {
+    name: "get-chessboardmagic-game-details",
+    config: {
+      description: "Fetch user's single game's metadata, moves, tags, variations and comment links",
+      inputSchema: { gameId: cbmGameIdSchema },
+      annotations: { openWorldHint: true },
+    },
+    cb: async ({ gameId }) => {
+      try {
+        const response = await fetch(`${BASE_URL}/mcp/games/${gameId}`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        });
+        const data = await response.json().catch(() => ({}));
+        if (response.status !== 200) return toolContentAdapter({}, `API error: ${JSON.stringify(data)}`);
+        return toolContentAdapter(data, undefined);
+      } catch (error) {
+        return toolContentAdapter({}, `Request failed: ${error}`);
       }
     },
-    async () => {
-      const { data, error } = await cbmService.getRepertoires();
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
+  });
 
-  mcpserver.registerTool(
-    "get-chessboardmagic-games",
-    {
-      description:
-        "Fetch user's chess games from the Chessboard Magic Repertoire Builder",
-      inputSchema: {},
-      annotations: {
-        openWorldHint: true
+  toolAdapter(mcpserver, {
+    name: "get-chessboardmagic-repertoire-details",
+    config: {
+      description: "Fetch user's single repertoire metadata, moves, variations and comment links",
+      inputSchema: { repertoireId: cbmRepIdSchema },
+      annotations: { openWorldHint: true },
+    },
+    cb: async ({ repertoireId }) => {
+      try {
+        const response = await fetch(`${BASE_URL}/mcp/repertoires/${repertoireId}`, {
+          headers: { Authorization: `Bearer ${auth.token}` },
+        });
+        const data = await response.json().catch(() => ({}));
+        if (response.status !== 200) return toolContentAdapter({}, `API error: ${JSON.stringify(data)}`);
+        return toolContentAdapter(data, undefined);
+      } catch (error) {
+        return toolContentAdapter({}, `Request failed: ${error}`);
       }
     },
-    async () => {
-      const { data, error } = await cbmService.getGames();
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  mcpserver.registerTool(
-    "get-chessboardmagic-game-details",
-    {
-      description:
-        "Fetch user's single game's metadata, moves, tags, variations and comment links",
-      inputSchema: {
-        gameId: cbmGameIdSchema,
-      },
-      annotations: {
-        openWorldHint: true
-      }
-    },
-    async ({ gameId }) => {
-      const { data, error } = await cbmService.getGameDetails(gameId);
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  mcpserver.registerTool(
-    "get-chessboardmagic-repertoire-details",
-    {
-      description:
-        "Fetch user's single repertoire metadata, moves, variations and comment links",
-      inputSchema: {
-        repertoireId: cbmRepIdSchema,
-      },
-      annotations: {
-        openWorldHint: true
-      }
-    },
-    async ({ repertoireId }: { repertoireId: string }) => {
-      const { data, error } = await cbmService.getRepertoireDetails(repertoireId);
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  mcpserver.registerTool(
-    "get-chessboardmagic-tcec-stats",
-    {
-      description:
-        "Fetch TCEC (Top Chess Engine Championship) statistics for a specific chess position",
-      inputSchema: {
-        fen: fenSchema
-      },
-      annotations: {
-        openWorldHint: true,
-      },
-    },
-    async ({ fen }: { fen: string }) => {
-      const { data, error } = await cbmService.getTcecStats(fen);
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  mcpserver.registerTool(
-    "get-chessboardmagic-tcec-games",
-    {
-      description:
-        "Fetch TCEC games that reached a specific chess position",
-      inputSchema: {
-        fen: fenSchema
-      },
-      annotations: {
-        openWorldHint: true,
-      },
-    },
-    async ({ fen }: { fen: string }) => {
-      const { data, error } = await cbmService.getTcecGames(fen);
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  mcpserver.registerTool(
-    "get-chessboardmagic-corr-stats",
-    {
-      description:
-        "Fetch correspondence chess statistics for a specific chess position",
-      inputSchema: {
-        fen: fenSchema
-      },
-      annotations: {
-        openWorldHint: true,
-      },
-    },
-    async ({ fen }: { fen: string }) => {
-      const { data, error } = await cbmService.getCorrStats(fen);
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
-
-  mcpserver.registerTool(
-    "get-chessboardmagic-corr-games",
-    {
-      description:
-        "Fetch correspondence chess games that reached a specific chess position",
-      inputSchema: {
-        fen: fenSchema
-      },
-      annotations: {
-        openWorldHint: true,
-      },
-    },
-    async ({ fen }: { fen: string }) => {
-      const { data, error } = await cbmService.getCorrGames(fen);
-      
-      return {
-        content: [
-          {
-            type: "text",
-            text: error || JSON.stringify(data, null, 2),
-          },
-        ],
-      };
-    }
-  );
+  });
 }

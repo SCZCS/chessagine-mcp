@@ -1,34 +1,30 @@
+import axios from "axios";
 import { MasterGames } from "../types/types.js";
 
-export const getLichessMasterOpeningStats = async (fen: string): Promise<MasterGames | null> => {
+const fetchLichessOpeningStats = async (
+  endpoint: "masters" | "lichess",
+  fen: string,
+  token: string,
+  options: { moves?: number; topGames?: number } = {}
+): Promise<MasterGames | null> => {
+  const { moves = 12, topGames = 4 } = options;
   try {
-    const masterEndpoint = `https://explorer.lichess.ovh/masters?fen=${fen}&moves=12&topGames=15`;
-    const response = await fetch(masterEndpoint);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const masterData = (await response.json()) as MasterGames;
-    return masterData;
+    const url = `https://explorer.lichess.org/${endpoint}?fen=${fen}&moves=${moves}&topGames=${topGames}`;
+    const response = await axios.get<MasterGames>(url, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
   } catch (error) {
     console.error("Error fetching opening stats:", error);
     return null;
   }
 };
 
-export const getLichessOpeningStats = async (fen: string): Promise<MasterGames | null> => {
-  try {
-    const masterEndpoint = `https://explorer.lichess.ovh/lichess?fen=${fen}&moves=12&topGames=4`;
-    const response = await fetch(masterEndpoint);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const masterData = (await response.json()) as MasterGames;
-    return masterData;
-  } catch (error) {
-    console.error("Error fetching opening stats:", error);
-    return null;
-  }
-};
+export const getLichessMasterOpeningStats = (fen: string, token: string) =>
+  fetchLichessOpeningStats("masters", fen, token, { moves: 12, topGames: 15 });
+
+export const getLichessOpeningStats = (fen: string, token: string) =>
+  fetchLichessOpeningStats("lichess", fen, token, { moves: 12, topGames: 4 });
 
 export const getLLMTranslator = (masterData: MasterGames): string => {
   const { opening, white, draws, black, moves, topGames } = masterData;

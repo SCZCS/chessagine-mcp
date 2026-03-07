@@ -32,6 +32,7 @@
     "node": ">=20.9.0"
   },
   "dependencies": {
+    "@jalpp/mcp-adapter": "^0.2.0",
     "@mliebelt/pgn-viewer": "^1.6.11",
     "@modelcontextprotocol/ext-apps": "^0.4.0",
     "@modelcontextprotocol/sdk": "^1.25.2",
