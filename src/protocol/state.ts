@@ -10,8 +10,7 @@ import { getSideSpaceControl } from "../themes/spaceControl.js";
 import { getSideSquareControl } from "../themes/sqaureControl.js";
 import { getKingSafety } from "../themes/kingSafety.js";
 import { getPieceMobility } from "../themes/pieceMobility.js";
-import { chessValidateBuilder, validate960Fen, validateStandardFen } from "../utils/utils.js";
-import { Chess960 } from "void57-chess";
+import { chessValidateBuilder } from "../utils/utils.js";
 
 
 export function calculateDeep(
@@ -86,5 +85,6 @@ export function getBoardState(fen: string, is960: boolean): BoardState {
     moveNumber,
     sidetomove,
     gamePhase,
+    is960,
   };
 }

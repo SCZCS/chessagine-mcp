@@ -187,7 +187,7 @@ export function validationBuilder(is960: boolean, fen: string) {
 
 export function chessValidateBuilder(is960: boolean, fen: string) {
   return {
-    chess: chessBuilder(is960),
+    chess: chessFromFenBuilder(fen, is960),
     isValid: validationBuilder(is960, fen),
   };
 }
