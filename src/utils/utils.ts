@@ -198,7 +198,7 @@ export function valid960Param(is960: boolean | undefined | null){
 export function validationBuilder(is960: boolean, fen: string) {
   let validFen;
 
-  is960 ? (validFen = validate960Fen(fen)) : validateStandardFen(fen);
+  is960 ? (validFen = validate960Fen(fen)) : (validFen = validateStandardFen(fen));
 
   return validFen;
 }
