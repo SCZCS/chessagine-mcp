@@ -24,7 +24,7 @@ export function registerNeuralNetTools(server: McpServer): void {
         ),
     },
   });
-
+  
   postToolAdapter(server, {
     name: "get-leela-analysis",
     description:
@@ -33,6 +33,16 @@ export function registerNeuralNetTools(server: McpServer): void {
     inputSchema: {
       fen: fenSchema,
       engine: z.literal("leela").default("leela"),
+    },
+  });
+
+  postToolAdapter(server, {
+    name: "get-maia3-batch-analysis",
+    description:
+      "Analyze chess position using Maia3 neural network across all rating levels (600-2600). Returns analyses for all 21 Maia3 rating models in a single batch request.",
+    endpoint: `${BASE_URL}/nn-batch-maia3`,
+    inputSchema: {
+      fen: fenSchema,
     },
   });
 
