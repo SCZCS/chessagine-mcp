@@ -14,22 +14,7 @@ It also renders individual positions and full PGN games for in-depth visual anal
   <img src="/preview.png" alt="ChessAgine Preview" />
 </p>
 
-## Installation
-
-### Option 1: Using MCPB File (Recommended)
-
-Download the `chessagine-mcp.mcpb` file and install it directly in Claude Desktop:
-
-1. Download the latest release from [GitHub releases](https://github.com/jalpp/chessagine-mcp/releases)
-2. Open Claude Desktop
-3. Go to Settings → Extensions → Install from file
-4. Select the `chessagine-mcp.mcpb` file
-5. Restart Claude Desktop
-
-> [!NOTE]  
-> To make sure its working correctly ask it to render the chessboard or a specific chess query
-
-### Option 2: Local Development Setup
+## Installation for Codex
 
 #### Prerequisites
 - Node.js 22+ 
@@ -37,39 +22,52 @@ Download the `chessagine-mcp.mcpb` file and install it directly in Claude Deskto
 
 #### Clone and Setup
 ```bash
-git clone https://github.com/jalpp/chessagine-mcp.git
+git clone https://github.com/SCZCS/chessagine-mcp.git
 cd chessagine-mcp
 npm install
 npm run build
 ```
 
-#### Configure Claude Desktop
+#### Configure Codex
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+Add this MCP server to `~/.codex/config.toml`, replacing the path with your checkout path:
 
 **macOS/Linux:**
-```json
-{
-  "mcpServers": {
-    "chessagine-mcp": {
-      "command": "node",
-      "args": ["/absolute/path/to/chessagine-mcp/build/runner/stdio.js"]
-    }
-  }
-}
+```toml
+[mcp_servers.chessagine-mcp]
+command = "node"
+args = ["/absolute/path/to/chessagine-mcp/build/runner/stdio.js"]
+startup_timeout_sec = 120
+
+[mcp_servers.chessagine-mcp.env]
+LICHESS_API_TOKEN = ""
+LICHESS_USERNAME = ""
+CHESSBOARD_MAGIC_PAT = ""
+POSIRA_API_KEY = ""
 ```
 
 **Windows:**
-```json
-{
-  "mcpServers": {
-    "chessagine-mcp": {
-      "command": "node", 
-      "args": ["C:\\absolute\\path\\to\\chessagine-mcp\\build\\runner\\stdio.js"]
-    }
-  }
-}
+```toml
+[mcp_servers.chessagine-mcp]
+command = "node"
+args = ["C:\\absolute\\path\\to\\chessagine-mcp\\build\\runner\\stdio.js"]
+startup_timeout_sec = 120
+
+[mcp_servers.chessagine-mcp.env]
+LICHESS_API_TOKEN = ""
+LICHESS_USERNAME = ""
+CHESSBOARD_MAGIC_PAT = ""
+POSIRA_API_KEY = ""
 ```
+
+The environment variables are optional. Set them only when you want the related private integrations:
+
+- `LICHESS_API_TOKEN`: Lichess API token for private account/study access
+- `LICHESS_USERNAME`: default Lichess username for account-aware tools
+- `CHESSBOARD_MAGIC_PAT`: Chessboard Magic personal access token
+- `POSIRA_API_KEY`: Posira opening explorer API key
+
+Restart Codex after editing `~/.codex/config.toml`. To smoke test the connection, ask Codex to render a chessboard or analyze a simple FEN.
 
 ### Usage:
 
@@ -93,9 +91,10 @@ You can deploy your own copy to Vercel in a few clicks:
 ### Dev commands
 
 ```bash
-npm run build:mcp  # Builds the mcp server layer which generates mcpb file
+npm run build:mcp  # Builds the stdio MCP server used by Codex
 npm run build:ui   # Builds the ChessAgine MCP UI html files
 npm run build      # Builds entire project, use for local development
+npm run build:mcpb # Optionally builds a Claude Desktop MCPB package
 npm run start      # starts the MCP server
 npm run debug      # opens MCP inspector to inspect new changes made
 ```

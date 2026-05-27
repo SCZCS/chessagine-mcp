@@ -13,7 +13,9 @@
   },
   "scripts": {
     "build:vercel": "tsc && tsc && chmod +x build/runner/remote.js",
-    "build:mcp": "tsc && chmod +x build/runner/stdio.js && mcpb pack",
+    "build:server": "tsc && chmod +x build/runner/stdio.js",
+    "build:mcp": "npm run build:server",
+    "build:mcpb": "npm run build:server && mcpb pack",
     "build:ui": "npm run build:chess-board && npm run build:pgn-viewer",
     "build:chess-board": "BUILD_APP=chess-board vite build",
     "build:pgn-viewer": "BUILD_APP=pgn-viewer vite build",

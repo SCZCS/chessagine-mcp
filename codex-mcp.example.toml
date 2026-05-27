@@ -1,0 +1,15 @@
+[mcp_servers.chessagine-mcp]
+command = "node"
+args = ["/absolute/path/to/chessagine-mcp/build/runner/stdio.js"]
+startup_timeout_sec = 120
+
+[mcp_servers.chessagine-mcp.env]
+# Optional. Required only for tools that access private Lichess data.
+LICHESS_API_TOKEN = ""
+LICHESS_USERNAME = ""
+
+# Optional. Required only for Chessboard Magic repertoire/game tools.
+CHESSBOARD_MAGIC_PAT = ""
+
+# Optional. Required only for Posira opening explorer tools.
+POSIRA_API_KEY = ""

@@ -8,8 +8,8 @@
     "url": "https://github.com/jalpp"
   },
   "icon": "icon.png",
-  "documentation": "https://github.com/jalpp/chessagine-mcp",
-  "support": "https://github.com/jalpp/chessagine-mcp",
+  "documentation": "https://github.com/SCZCS/chessagine-mcp",
+  "support": "https://github.com/SCZCS/chessagine-mcp",
   "server": {
     "type": "node",
     "entry_point": "/build/runner/stdio.js",
@@ -21,7 +21,8 @@
       "env": {
         "LICHESS_API_TOKEN": "${user_config.LICHESS_API_KEY}",
         "LICHESS_USERNAME": "${user_config.LICHESS_USERNAME}",
-        "CHESSBOARD_MAGIC_PAT": "${user_config.CHESSBOARD_MAGIC_PAT}"
+        "CHESSBOARD_MAGIC_PAT": "${user_config.CHESSBOARD_MAGIC_PAT}",
+        "POSIRA_API_KEY": "${user_config.POSIRA_API_KEY}"
       }
     }
   },
